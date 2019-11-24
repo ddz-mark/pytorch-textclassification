@@ -1,0 +1,10 @@
+.data
+.vector_cache
+.ipynb_checkpoints
+*.ckpt
+.idea/
+__pycache__/
+*/__pycache__/
+*.pt
+*/cache/
+*/output/
