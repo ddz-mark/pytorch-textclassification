@@ -61,11 +61,11 @@ class ModelHandler(nn.Module):
             trainLoss = 0.0
             for index,(X_train_var, y_train_var) in enumerate(train_iter):
                 
-                X_train_var = X_train_var.to(self.device)
+                X_train_var = (i.to(self.device) for i in X_train_var)
                 
                 # 将 label 转为 one-hot编码，这里针对多分类和二分类的softmax形式。如果是二分类的sogmid，则注释
                 y_train_var = y_train_var.unsqueeze(1)
-                y_train_var = torch.zeros(len(X_train_var), verbose).scatter_(1, y_train_var, 1)
+                y_train_var = torch.zeros(len(y_train_var), verbose).scatter_(1, y_train_var, 1)
                 y_train_var = y_train_var.to(self.device)
     
                 self.zero_grad()
@@ -128,10 +128,10 @@ class ModelHandler(nn.Module):
         valAcc = 0.0
         valLoss = 0.0
         for index, (tX_val_var, tY_val_var) in enumerate(val_loader): 
-            tX_val_var = tX_val_var.to(self.device)
+            tX_val_var = (i.to(self.device) for i in tX_val_var)
             
             tY_val_var = tY_val_var.unsqueeze(1)
-            tY_val_var = torch.zeros(len(tX_val_var), verbose).scatter_(1, tY_val_var, 1)
+            tY_val_var = torch.zeros(len(tY_val_var), verbose).scatter_(1, tY_val_var, 1)
             tY_val_var = tY_val_var.to(self.device)
             
             scores = self.forward(tX_val_var)
@@ -163,7 +163,7 @@ class ModelHandler(nn.Module):
     
     def getAUC(self, y_true, y_score):
         return roc_auc_score(y_true.detach().cpu().numpy(), 
-                             y_score.detach().cpu().numpy())    
+                             y_score.detach().cpu().numpy())     
 
 
 # In[ ]:

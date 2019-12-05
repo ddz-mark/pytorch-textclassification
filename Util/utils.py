@@ -21,10 +21,13 @@ def seed_everything(seed=2019):
     设置随机种子，最好在训练的时候调用
     '''
     random.seed(seed)
-    os.environ['PYTHONHASHSEED'] = str(seed)
     np.random.seed(seed)
+    
     torch.manual_seed(seed)
     torch.cuda.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)
+    
+    torch.backends.cudnn.benchmark = False
     torch.backends.cudnn.deterministic = True
     
 def get_device():
