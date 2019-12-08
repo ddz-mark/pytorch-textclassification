@@ -242,7 +242,7 @@ class ModelHandler(nn.Module):
 #                 scores = self.forword(X_train_var)
 #                 loss = loss_fn(scores.squeeze(), y_train_var)
 #                 trainAcc = trainAcc + self.getAUC(y_train_var, torch.sigmoid(scores).squeeze())
-#                 trainLoss = trainLoss + loss.data.item()
+#                 trainLoss = trainLoss + loss.sst2_data.item()
 #                 self.train()
 #                 torch.set_grad_enabled(True)
 #                 loss.backward()
@@ -309,7 +309,7 @@ class ModelHandler(nn.Module):
 #             if isTrain == True:
 #                 loss = loss_fn(scores.squeeze(), tY_val_var / temperature)
 #                 valAcc += self.getAUC(tY_val_var / temperature, torch.sigmoid(scores).squeeze())
-#                 valLoss = valLoss + loss.data.item()
+#                 valLoss = valLoss + loss.sst2_data.item()
 
 #         if isTrain == True:
 #             return valAcc / float(batchNum), valLoss / float(batchNum)
