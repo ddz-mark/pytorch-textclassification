@@ -31,7 +31,7 @@ class TextRNN_Attention(nn.Module):
 
         self.fc = nn.Linear(hidden_size * 2, output_dim)
 
-        # Attention 机制
+        # Attention 机制，requires_grad设置为 True，不设置也可以
         ws = torch.empty(self.hidden_size * 2, self.hidden_size * 2,
                          dtype=torch.float32, device=self.device,
                          requires_grad=True)
