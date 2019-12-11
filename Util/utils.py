@@ -1,4 +1,3 @@
-
 # coding: utf-8
 
 # In[3]:
@@ -7,13 +6,7 @@
 import pandas as pd
 import numpy as np
 import random
-
-import os
-
 import torch
-
-
-# In[4]:
 
 
 def seed_everything(seed=2019):
@@ -22,14 +15,15 @@ def seed_everything(seed=2019):
     '''
     random.seed(seed)
     np.random.seed(seed)
-    
+
     torch.manual_seed(seed)
     torch.cuda.manual_seed(seed)
     torch.cuda.manual_seed_all(seed)
-    
+
     torch.backends.cudnn.benchmark = False
     torch.backends.cudnn.deterministic = True
-    
+
+
 def get_device():
     '''
     获取机器的cpu或者gpu
@@ -41,34 +35,3 @@ def get_device():
     else:
         print("device is cpu, not recommend")
     return device, n_gpu
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-

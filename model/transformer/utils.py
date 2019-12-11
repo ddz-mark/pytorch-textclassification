@@ -2,7 +2,8 @@
 # user  : dudaizhong
 # time  : 19-12-10 下午8:22
 # info  :
-from numpy.ma import copy
+import copy
+
 from torch import nn
 
 

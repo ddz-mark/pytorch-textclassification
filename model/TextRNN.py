@@ -40,8 +40,7 @@ class TextRNN(nn.Module):
         # print(lstm_out.shape)  # (sent_len 40,batch_size 128,hidden_size*2 128)
         # 这里进行前后连接时，使用的隐藏状态 hn 的最后一层 与 直接使用lstm_out中最后一层有不一样
         out = torch.cat((hn[-2, :, :], hn[-1, :, :]), dim=1)
-        # print(out.shape)
-        #         print("hn shape:",hn.shape) # ([128, 128])
+        # print(out.shape) # (batch_size 128, sent_len 100)
         out = self.fc(out)
         # print(out.shape)
         return out
