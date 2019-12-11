@@ -12,11 +12,11 @@ from model.transformer.PositionalEncoding import PositionalEncoding
 from model.transformer.PositionwiseFeedForward import PositionwiseFeedForward
 
 
-class Transformer_TextClassifier(nn.Module):
+class Text_Transformer(nn.Module):
     """ 用 Transformer 来作为特征抽取的基本单元 """
 
     def __init__(self, head, n_layer, emd_dim, d_model, d_ff, output_dim, dropout, pretrained_embeddings):
-        super(Transformer_TextClassifier, self).__init__()
+        super(Text_Transformer, self).__init__()
 
         self.word_embedding = Embeddings(pretrained_embeddings, emd_dim)
         self.position_embedding = PositionalEncoding(emd_dim, dropout)
@@ -31,11 +31,7 @@ class Transformer_TextClassifier(nn.Module):
         self.fc = nn.Linear(d_model, output_dim)
 
     def forward(self, x):
-        """
-        x:
-            text: [sent len, batch size], 文本数据
-            text_lens: [batch_size], 文本数据长度
-        """
+
         text, _ = x
         # text: [batch_size, sent_len]
 
