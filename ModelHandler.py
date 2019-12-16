@@ -7,7 +7,7 @@ import torch
 import torch.optim as optim
 import torch.nn as nn
 import torch.nn.functional as F
-from sklearn.metrics import roc_auc_score
+from sklearn.metrics import roc_auc_score,accuracy_score
 
 import numpy as np
 import pandas as pd
@@ -160,8 +160,12 @@ class ModelHandler(nn.Module):
         return predict_proba
 
     def getAUC(self, y_true, y_score):
-        return roc_auc_score(y_true.detach().cpu().numpy(),
-                             y_score.detach().cpu().numpy())
+        y_true = y_true.detach().cpu().numpy()
+        y_score = y_score.detach().cpu().numpy()
+        a, _, _ = np.unique(y_true.view(y_true.dtype.descr * y_true.shape[1]), return_index=True, return_inverse=True)
+        if len(a) == 1: # bug in roc_auc_score
+            return accuracy_score(y_true, y_score)
+        return roc_auc_score(y_true, y_score)
 
     # In[ ]:
 
