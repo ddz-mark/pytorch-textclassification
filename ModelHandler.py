@@ -59,7 +59,7 @@ class ModelHandler(nn.Module):
             trainLoss = 0.0
             for index, (X_train_var, y_train_var) in enumerate(train_iter):
                 X_train_var = (i.to(self.device) for i in X_train_var)
-
+                
                 # 将 label 转为 one-hot编码，这里针对多分类和二分类的softmax形式。如果是二分类的sogmid，则注释
                 y_train_var = y_train_var.unsqueeze(1)
                 y_train_var = torch.zeros(len(y_train_var), verbose).scatter_(1, y_train_var, 1)

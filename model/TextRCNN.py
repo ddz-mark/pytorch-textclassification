@@ -10,8 +10,7 @@ from torch import nn
 
 class TextRCNN(nn.Module):
 
-    def __init__(self, embedding_dim, output_dim, hidden_size, num_layers, bidirectional, pretrained_embeddings,
-                 device):
+    def __init__(self, embedding_dim, output_dim, hidden_size, num_layers, bidirectional, pretrained_embeddings):
         super(TextRCNN, self).__init__()
 
         self.embedding = nn.Embedding.from_pretrained(

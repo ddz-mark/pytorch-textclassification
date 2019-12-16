@@ -19,12 +19,9 @@ import os
 
 from sklearn.metrics import roc_auc_score
 
-# 导入自己的库
-from Util.utils import seed_everything, get_device
-from ModelHandler import *
 
 
-def load_sst2(path, text_field, label_field, batch_size, device):
+def load_sst2(path, text_field, label_field, batch_size, embedding_file, cache_file):
     # 2. 定义 DataSet
     train, dev = data.TabularDataset.splits(
         path=path, train='train.tsv', validation='dev.tsv', format='tsv', skip_header=True,
@@ -37,22 +34,22 @@ def load_sst2(path, text_field, label_field, batch_size, device):
     print("the result of dataset: ", train[0].text, train[0].label)
 
     # 3. 建立 vocab，大小是text_field里面的词数量
-    # vectors = vocab.Vectors(embedding_file, cache_dir)
+    vectors = vocab.Vectors(embedding_file, cache_file)
 
     text_field.build_vocab(
         train, dev, test, max_size=25000,
-        vectors='glove.6B.100d', unk_init=torch.Tensor.normal_)
+        vectors=vectors, unk_init=torch.Tensor.normal_)
 
     label_field.build_vocab(train, dev, test)
 
     # 4. 构造迭代器
     train_iter, dev_iter = data.BucketIterator.splits(
         (train, dev), batch_sizes=(batch_size, batch_size), sort_key=lambda x: len(x.text),
-        sort_within_batch=True, repeat=False, shuffle=True, device=device)
+        sort_within_batch=True, repeat=False, shuffle=True)
 
     # 同样单独处理的时候
     test_iter = data.Iterator(test, batch_size=len(test), train=False,
-                              sort=False, device=device)
+                              sort=False)
 
     print("the size of train_iter: {}, dev_iter:{}, test_iter:{}".format(
         len(train_iter), len(dev_iter), len(test_iter)))

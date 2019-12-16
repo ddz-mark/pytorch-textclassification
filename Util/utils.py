@@ -28,10 +28,16 @@ def get_device():
     '''
     获取机器的cpu或者gpu
     '''
-    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    device_all = []
     n_gpu = torch.cuda.device_count()
+    if n_gpu > 1:
+        for index in range(n_gpu):
+            device_all.append(torch.device("cuda:"+str(index) if torch.cuda.is_available() else "cpu"))
+    else:
+        device_all.append(torch.device("cpu"))
+        
     if torch.cuda.is_available():
         print("device is cuda, # cuda is: ", n_gpu)
     else:
         print("device is cpu, not recommend")
-    return device, n_gpu
+    return device_all, n_gpu
