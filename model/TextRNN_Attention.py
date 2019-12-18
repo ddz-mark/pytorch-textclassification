@@ -12,7 +12,7 @@ from model.base.LSTM import LSTM
 
 class TextRNN_Attention(nn.Module):
     def __init__(self, embedding_dim, output_dim, hidden_size, num_layers, bidirectional, pretrained_embeddings,
-                 device):
+                 device,dropout=0.5):
         super(TextRNN_Attention, self).__init__()
 
         self.hidden_size = hidden_size
@@ -30,6 +30,8 @@ class TextRNN_Attention(nn.Module):
         self.lstm = LSTM(embedding_dim, hidden_size, num_layers, bidirectional=bidirectional)  # ,bidirectional=True)
 
         self.fc = nn.Linear(hidden_size * 2, output_dim)
+        
+        self.dropout = nn.Dropout(dropout)
 
         # Attention 机制，requires_grad设置为 True，不设置也可以
         ws = torch.empty(self.hidden_size * 2, self.hidden_size * 2,
@@ -77,7 +79,7 @@ class TextRNN_Attention(nn.Module):
 
         batch_size, sent_len = text.shape
         # print(text.shape) #(batch_size 128, sent_len 40)
-        vec = self.embedding(text)
+        vec = self.dropout(self.embedding(text))
         # print(vec.shape) #(batch_size 128,sent_len 40,emb_dim 100)
         vec = vec.permute(1, 0, 2)
         lstm_out, hn = self.lstm(vec, text_lengths)

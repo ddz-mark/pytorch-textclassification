@@ -11,7 +11,7 @@ from model.base.Conv1d import Conv1d
 
 class TextCNN(nn.Module):
     def __init__(self, embedding_dim, n_filters, filter_sizes, output_dim,
-                 pretrained_embeddings):
+                 pretrained_embeddings, dropout=0.5):
         super(TextCNN, self).__init__()
         #         self.embedding = nn.Embedding(len_vocab,100)
         self.embedding = nn.Embedding.from_pretrained(
@@ -20,6 +20,8 @@ class TextCNN(nn.Module):
         self.convs = Conv1d(embedding_dim, n_filters, filter_sizes)
 
         self.fc = nn.Linear(len(filter_sizes) * n_filters, output_dim)
+        
+        self.dropout = nn.Dropout(dropout)
 
     def forward(self, x):
         text, _ = x
@@ -41,7 +43,7 @@ class TextCNN(nn.Module):
         #        (batch_size, n_filters)([128, 100]), torch.Size([128, 100]), torch.Size([128, 100])
 
         #         cat函数将（A,B），dim=0按行拼接，dim=1按列拼接
-        cat = torch.cat(pooled, dim=1)
+        cat = self.dropout(torch.cat(pooled, dim=1))
         #         print(cat.shape) # [128, 300]
         out = self.fc(cat)
         #         print(out.shape) # [128, 2]

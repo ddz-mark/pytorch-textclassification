@@ -10,7 +10,7 @@ from torch import nn
 
 class TextRCNN(nn.Module):
 
-    def __init__(self, embedding_dim, output_dim, hidden_size, num_layers, bidirectional, pretrained_embeddings):
+    def __init__(self, embedding_dim, output_dim, hidden_size, num_layers, bidirectional, pretrained_embeddings,dropout=0.5):
         super(TextRCNN, self).__init__()
 
         self.embedding = nn.Embedding.from_pretrained(
@@ -19,12 +19,12 @@ class TextRCNN(nn.Module):
         self.W2 = nn.Linear(2 * hidden_size + embedding_dim, hidden_size * 2)
         self.fc = nn.Linear(hidden_size * 2, output_dim)
 
-    #         self.dropout = nn.Dropout(dropout)
+        self.dropout = nn.Dropout(dropout)
 
     def forward(self, x):
         text, text_lengths = x
         # text: [seq_len, batch size]
-        embedded = self.embedding(text)
+        embedded = self.dropout(self.embedding(text))
         embedded = embedded.permute(1, 0, 2)
         #         print(embedded.shape)
         # print([seq_len, batch_size, embeding_dim])
